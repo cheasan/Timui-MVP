@@ -45,8 +45,7 @@ type BottomTab = 'do' | 'deals' | 'develop' | 'profile';
 type ContentTab = 'assignments' | 'tasks';
 
 export default function App() {
-  const { user, theme: telegramTheme } = useTelegram();
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  const { user } = useTelegram();
 
   const [bottomTab, setBottomTab] = useState<BottomTab>('do');
   const [contentTab, setContentTab] = useState<ContentTab>('assignments');
@@ -220,29 +219,10 @@ export default function App() {
     a.deadline.getTime() - b.deadline.getTime()
   );
 
-  const toggleDarkMode = () => {
-    setIsDarkMode(!isDarkMode);
-  };
-
-  useEffect(() => {
-    setIsDarkMode(telegramTheme === 'dark');
-  }, [telegramTheme]);
-
-  // Apply dark mode class to document root
-  useEffect(() => {
-    if (isDarkMode) {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-  }, [isDarkMode]);
-
   // Main app
   return (
     <div className="min-h-screen relative pb-32" style={{
-      background: isDarkMode 
-        ? 'rgba(18, 18, 20, 1.00)' 
-        : 'var(--background-gradient)'
+      background: 'var(--background-gradient)'
     }}>
       {/* Main Content */}
       <main className="max-w-6xl mx-auto px-6 py-8 relative z-0">
@@ -354,8 +334,6 @@ export default function App() {
             {/* Profile Content */}
             <Profile
               user={user}
-              isDarkMode={isDarkMode}
-              onToggleDarkMode={toggleDarkMode}
               onCVBuilderChange={setShowCVBuilder}
             />
           </div>

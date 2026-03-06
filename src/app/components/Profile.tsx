@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { User, Briefcase, Wallet, Share2, Plus, CreditCard, IdCard, Moon, Sun, X, Edit2, Mail, Phone, Linkedin, Github, Globe, Award, BookOpen, Code, Heart, Languages, FileText, Eye, ChevronRight, ChevronLeft, Trash2 } from 'lucide-react';
+import { User, Briefcase, Wallet, Share2, Plus, CreditCard, IdCard, X, Edit2, Mail, Phone, Linkedin, Github, Globe, Award, BookOpen, Code, Heart, Languages, FileText, Eye, ChevronRight, ChevronLeft, Trash2 } from 'lucide-react';
 import { ImageWithFallback } from './figma/ImageWithFallback';
 import { TelegramUser } from '../../telegram/TelegramProvider';
 
@@ -41,14 +41,12 @@ interface WalletCard {
 
 interface ProfileProps {
   user: TelegramUser | null;
-  isDarkMode: boolean;
-  onToggleDarkMode: () => void;
   onCVBuilderChange?: (isActive: boolean) => void;
 }
 
 type ViewMode = 'main' | 'cv' | 'wallet';
 
-export function Profile({ user, isDarkMode, onToggleDarkMode, onCVBuilderChange }: ProfileProps) {
+export function Profile({ user, onCVBuilderChange }: ProfileProps) {
   const [viewMode, setViewMode] = useState<ViewMode>('main');
 
   useEffect(() => {
@@ -1102,50 +1100,6 @@ export function Profile({ user, isDarkMode, onToggleDarkMode, onCVBuilderChange 
             </div>
           </div>
         )}
-
-        {/* Settings Row - At Bottom */}
-        <div className="backdrop-blur-xl border mt-6" style={{ 
-          backgroundColor: 'var(--glass-card)',
-          borderColor: 'var(--glass-border)',
-          borderRadius: 'var(--radius-card)',
-          boxShadow: 'var(--glass-shadow)',
-          padding: '16px'
-        }}>
-          <div className="flex items-center justify-between gap-4">
-            {/* Dark Mode Toggle */}
-            <div className="flex items-center gap-3 flex-1">
-              <div className="flex items-center gap-2">
-                {isDarkMode ? (
-                  <Moon className="w-5 h-5" style={{ color: 'var(--foreground)' }} />
-                ) : (
-                  <Sun className="w-5 h-5" style={{ color: 'var(--foreground)' }} />
-                )}
-                <span style={{ 
-                  fontSize: 'var(--text-sm)',
-                  fontWeight: 'var(--font-weight-medium)',
-                  fontFamily: 'Inter, sans-serif',
-                  color: 'var(--foreground)'
-                }}>
-                  Dark Mode
-                </span>
-              </div>
-              <button
-                onClick={onToggleDarkMode}
-                className="relative inline-flex items-center h-6 rounded-full w-11 transition-colors"
-                style={{
-                  backgroundColor: isDarkMode ? 'var(--primary)' : 'var(--muted)'
-                }}
-              >
-                <span
-                  className="inline-block w-4 h-4 transform rounded-full bg-white transition-transform"
-                  style={{
-                    transform: isDarkMode ? 'translateX(24px)' : 'translateX(4px)'
-                  }}
-                />
-              </button>
-            </div>
-          </div>
-        </div>
       </div>
     );
   }

@@ -113,8 +113,27 @@
   --sidebar-accent-foreground: #0E0049;
   /* The default border color for elements in sidebars and navigation menus. */
   --sidebar-border: rgba(130, 69, 254, 0.15);
-  /* The default color for focus rings, outlines, and other focus indicators in sidebars and navigation menus. */
   --sidebar-ring: rgba(130, 69, 254, 0.3);
+}
+
+/* Force Telegram Mini App to light theme - Override Telegram CSS variables */
+:root {
+  --tg-theme-bg-color: #FFFFFF !important;
+  --tg-theme-text-color: #0E0049 !important;
+  --tg-theme-hint-color: rgba(14, 0, 73, 0.6) !important;
+  --tg-theme-link-color: #8245FE !important;
+  --tg-theme-button-color: #8245FE !important;
+  --tg-theme-button-text-color: #FFFFFF !important;
+  --tg-theme-secondary-bg-color: rgba(255, 255, 255, 0.8) !important;
+  --tg-theme-section-bg-color: #FFFFFF !important;
+  --tg-theme-section-header-text-color: #0E0049 !important;
+  --tg-theme-section-separator-color: rgba(130, 69, 254, 0.15) !important;
+  --tg-theme-subtitle-text-color: rgba(14, 0, 73, 0.6) !important;
+  --tg-theme-viewport-background-color: #FFFFFF !important;
+  --tg-theme-bottom-bar-bg-color: #FFFFFF !important;
+  --tg-theme-accent-color: #8245FE !important;
+  --tg-viewport-height: 100vh !important;
+  --tg-viewport-stable-height: 100vh !important;
 }
 
 .dark {

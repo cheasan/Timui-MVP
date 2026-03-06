@@ -11,7 +11,6 @@ export interface TelegramUser {
 
 interface TelegramContextType {
   user: TelegramUser | null;
-  theme: 'light' | 'dark';
   initDataRaw: string | null;
   isReady: boolean;
 }
@@ -24,7 +23,6 @@ interface TelegramProviderProps {
 
 export function TelegramProvider({ children }: TelegramProviderProps) {
   const [user, setUser] = useState<TelegramUser | null>(null);
-  const [theme, setTheme] = useState<'light' | 'dark'>('light');
   const [initDataRaw, setInitDataRaw] = useState<string | null>(null);
   const [isReady, setIsReady] = useState(false);
 
@@ -40,9 +38,8 @@ export function TelegramProvider({ children }: TelegramProviderProps) {
 
       tg.ready();
       tg.expand();
-
-      const tgTheme = tg.colorScheme || 'light';
-      setTheme(tgTheme);
+      tg.setHeaderColor('#FFFFFF');
+      tg.setBackgroundColor('#FFFFFF');
 
       const initData = tg.initData || null;
       setInitDataRaw(initData);
@@ -50,10 +47,6 @@ export function TelegramProvider({ children }: TelegramProviderProps) {
       if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
         setUser(tg.initDataUnsafe.user);
       }
-
-      tg.onEvent('themeChanged', () => {
-        setTheme(tg.colorScheme || 'light');
-      });
 
       setIsReady(true);
     };
@@ -70,7 +63,7 @@ export function TelegramProvider({ children }: TelegramProviderProps) {
   }, []);
 
   return (
-    <TelegramContext.Provider value={{ user, theme, initDataRaw, isReady }}>
+    <TelegramContext.Provider value={{ user, initDataRaw, isReady }}>
       {children}
     </TelegramContext.Provider>
   );
