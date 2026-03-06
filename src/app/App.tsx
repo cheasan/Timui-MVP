@@ -5,12 +5,11 @@ import { AssignmentDetail } from './components/AssignmentDetail';
 import { AddAssignmentForm } from './components/AddAssignmentForm';
 import { AddTaskForm } from './components/AddTaskForm';
 import { BottomNav } from './components/BottomNav';
-import { Welcome } from './components/Welcome';
-import { Onboarding } from './components/Onboarding';
 import { Profile } from './components/Profile';
 import { TasksList } from './components/TasksList';
 import { Deals } from './components/Deals';
 import { Develop } from './components/Develop';
+import { useTelegram } from '../telegram/TelegramProvider';
 import Group from '../imports/Group1';
 
 interface Task {
@@ -46,10 +45,7 @@ type BottomTab = 'do' | 'deals' | 'develop' | 'profile';
 type ContentTab = 'assignments' | 'tasks';
 
 export default function App() {
-  // Authentication state
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [hasCompletedOnboarding, setHasCompletedOnboarding] = useState(false);
-  const [userProvider, setUserProvider] = useState<'google' | 'apple' | null>(null);
+  const { user, theme: telegramTheme } = useTelegram();
   const [isDarkMode, setIsDarkMode] = useState(false);
 
   const [bottomTab, setBottomTab] = useState<BottomTab>('do');
@@ -224,30 +220,13 @@ export default function App() {
     a.deadline.getTime() - b.deadline.getTime()
   );
 
-  // Authentication handlers
-  const handleLogin = (provider: 'google' | 'apple') => {
-    // In a real app, this would handle actual authentication
-    console.log(`Logging in with ${provider}`);
-    setUserProvider(provider);
-    setIsAuthenticated(true);
-  };
-
-  const handleOnboardingComplete = (data: any) => {
-    // In a real app, this would save the onboarding data
-    console.log('Onboarding completed with data:', data);
-    setHasCompletedOnboarding(true);
-  };
-
-  const handleLogout = () => {
-    setIsAuthenticated(false);
-    setHasCompletedOnboarding(false);
-    setUserProvider(null);
-    // Dark mode persists across logout
-  };
-
   const toggleDarkMode = () => {
     setIsDarkMode(!isDarkMode);
   };
+
+  useEffect(() => {
+    setIsDarkMode(telegramTheme === 'dark');
+  }, [telegramTheme]);
 
   // Apply dark mode class to document root
   useEffect(() => {
@@ -257,16 +236,6 @@ export default function App() {
       document.documentElement.classList.remove('dark');
     }
   }, [isDarkMode]);
-
-  // Show welcome screen if not authenticated
-  if (!isAuthenticated) {
-    return <Welcome onLogin={handleLogin} isDarkMode={isDarkMode} />;
-  }
-
-  // Show onboarding if authenticated but hasn't completed onboarding
-  if (!hasCompletedOnboarding) {
-    return <Onboarding onComplete={handleOnboardingComplete} isDarkMode={isDarkMode} />;
-  }
 
   // Main app
   return (
@@ -383,10 +352,10 @@ export default function App() {
             </div>
 
             {/* Profile Content */}
-            <Profile 
+            <Profile
+              user={user}
               isDarkMode={isDarkMode}
               onToggleDarkMode={toggleDarkMode}
-              onLogout={handleLogout}
               onCVBuilderChange={setShowCVBuilder}
             />
           </div>

@@ -1,6 +1,7 @@
-import { useState } from 'react';
-import { User, Briefcase, Wallet, Share2, Plus, CreditCard, IdCard, Moon, Sun, LogOut, X, Edit2, Mail, Phone, Linkedin, Github, Globe, Award, BookOpen, Code, Heart, Languages, FileText, Eye, ChevronRight, ChevronLeft, Trash2 } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { User, Briefcase, Wallet, Share2, Plus, CreditCard, IdCard, Moon, Sun, X, Edit2, Mail, Phone, Linkedin, Github, Globe, Award, BookOpen, Code, Heart, Languages, FileText, Eye, ChevronRight, ChevronLeft, Trash2 } from 'lucide-react';
 import { ImageWithFallback } from './figma/ImageWithFallback';
+import { TelegramUser } from '../../telegram/TelegramProvider';
 
 interface ProfileInfo {
   name: string;
@@ -39,16 +40,25 @@ interface WalletCard {
 }
 
 interface ProfileProps {
+  user: TelegramUser | null;
   isDarkMode: boolean;
   onToggleDarkMode: () => void;
-  onLogout: () => void;
   onCVBuilderChange?: (isActive: boolean) => void;
 }
 
 type ViewMode = 'main' | 'cv' | 'wallet';
 
-export function Profile({ isDarkMode, onToggleDarkMode, onLogout, onCVBuilderChange }: ProfileProps) {
+export function Profile({ user, isDarkMode, onToggleDarkMode, onCVBuilderChange }: ProfileProps) {
   const [viewMode, setViewMode] = useState<ViewMode>('main');
+
+  useEffect(() => {
+    if (user) {
+      setProfileInfo(prev => ({
+        ...prev,
+        name: `${user.firstName} ${user.lastName || ''}`.trim()
+      }));
+    }
+  }, [user]);
   const [selectedCard, setSelectedCard] = useState<WalletCard | null>(null);
   const [showEditProfile, setShowEditProfile] = useState(false);
   const [showAddCV, setShowAddCV] = useState(false);
@@ -1134,24 +1144,6 @@ export function Profile({ isDarkMode, onToggleDarkMode, onLogout, onCVBuilderCha
                 />
               </button>
             </div>
-
-            {/* Logout Button */}
-            <button
-              onClick={onLogout}
-              className="px-4 py-2 active:opacity-80 transition-opacity flex items-center gap-2"
-              style={{ 
-                backgroundColor: 'var(--destructive)',
-                color: 'white',
-                borderRadius: 'var(--radius-button)',
-                fontSize: 'var(--text-sm)',
-                fontWeight: 'var(--font-weight-medium)',
-                fontFamily: 'Inter, sans-serif',
-                minHeight: '44px'
-              }}
-            >
-              <LogOut className="w-4 h-4" />
-              <span>Logout</span>
-            </button>
           </div>
         </div>
       </div>
